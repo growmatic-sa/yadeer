@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yadeer.sa/sitemap.xml
+Sitemap: https://growmatic-sa.github.io/yadeer/sitemap.xml
