@@ -181,7 +181,7 @@ def crumbs_html(trail, rel):
 
 def banner(rel, trail, eyebrow, h1, lead, icon, chips, scheme="teal", actions="", seed="x", uid="b", kind="svc"):
     art = art_svg(seed, icon, chips, scheme, uid)
-    return (f'<section class="banner b-{kind}" data-spot><div class="spot" aria-hidden="true"></div><div class="wrap banner-in"><div class="banner-copy">'
+    return (f'<section class="banner b-{kind}">{floaters("b-" + seed, 6)}<div class="wrap banner-in"><div class="banner-copy">'
             f'{crumbs_html(trail, rel)}<p class="eyebrow">{eyebrow}</p><h1>{h1}</h1><p class="lead">{lead}</p>'
             f'<div class="actions">{actions}</div></div><div class="banner-art" aria-hidden="true">{art}</div></div></section>')
 
@@ -254,3 +254,14 @@ def network_bg(seed, w=1366, h=720, n=26):
     return (f'<svg class="hero-net" viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">'
             f'<g stroke="#B8E5DF" stroke-opacity=".16" stroke-width="1.2">{"".join(lines)}</g><g fill="#B8E5DF" fill-opacity=".55">{dots}</g>'
             f'<path d="{SYMBOL_PATH}" transform="translate(60 330) scale(1.5)" fill="none" stroke="#B8E5DF" stroke-opacity=".12" stroke-width="1.6"/></svg>')
+
+
+def floaters(seed, n=7):
+    """عناصر زخرفية عائمة تتحرك بتأثير المنظور عند التمرير (حلقات، نقاط، علامات +، مربعات مستديرة)."""
+    r = _rng("fl" + seed)
+    kinds = ["ring", "dot", "plus", "sq", "ring", "dot"]
+    out = []
+    for i in range(n):
+        k = kinds[int(r() * len(kinds))]
+        out.append(f'<i class="fl fl-{k}" style="left:{r() * 96:.0f}%;top:{r() * 92:.0f}%;--s:{16 + r() * 44:.0f}px" data-sp="{(r() - .5) * .9:.2f}"></i>')
+    return '<div class="fls" aria-hidden="true">' + "".join(out) + "</div>"

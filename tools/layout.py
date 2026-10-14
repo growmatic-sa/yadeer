@@ -7,6 +7,7 @@ from content_misc import SITE, TOOLS
 from content_services import SERVICES, GROUPS
 
 SITE_NAME = SITE["name"]
+HEAD_JS = '''<script>(function(d){var h=d.documentElement;h.classList.add("js");try{if(matchMedia("(prefers-reduced-motion: reduce)").matches){h.classList.add("ready");return}var n=performance.getEntriesByType&&performance.getEntriesByType("navigation")[0],ty=n?n.type:"navigate",same=false;try{same=!!d.referrer&&new URL(d.referrer).origin===location.origin}catch(e){}var full=ty==="reload"||(ty==="navigate"&&!same);h.classList.add(full?"in-full":"in-short");setTimeout(function(){h.classList.add("ready")},full?2250:380);setTimeout(function(){h.classList.remove("in-full","in-short")},full?3500:1300)}catch(e){h.classList.add("ready")}addEventListener("pageshow",function(e){if(e.persisted){h.classList.remove("in-full","in-short");h.classList.add("ready")}})})(document)</script>'''
 
 
 class Page:
@@ -147,10 +148,12 @@ def render(pg, root_hint=True):
 <link rel="manifest" href="{pg.rel("/site.webmanifest")}">
 <link rel="preload" href="{pg.asset("fonts/cairo-arabic.woff2")}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{pg.asset("css/style.css")}">
-<script>document.documentElement.classList.add("js")</script>
+{HEAD_JS}
 <script type="application/ld+json">{ld}</script>
 </head>
 <body data-root="{pg.rel("/")}" data-wa="{SITE["wa"]}" class="{pg.bodycls}">
+<div id="intro" aria-hidden="true"><i class="cur cr t"></i><i class="cur cl t"></i><i class="cur cr c"></i><i class="cur cl c"></i>
+<div class="lk"><img class="lk-w" src="{pg.asset("img/logo-wordmark.svg")}" alt="" width="1211" height="448"><svg class="lk-s" viewBox="0 -332.63 1211.313 447.525"><g transform="translate(752.958 -281.2) scale(1.919)"><path class="sp" pathLength="1" d="{SYMBOL_PATH}"/><circle class="sd" cx="218.794" cy="-6.794" r="20"/></g></svg><i class="lk-bar"></i></div></div>
 <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
 <div class="progress" aria-hidden="true"></div>
 {nav_html(pg)}
