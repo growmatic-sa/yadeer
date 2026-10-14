@@ -10,7 +10,7 @@ SITE_URL = os.environ.get("SITE_URL", "https://yadeer.sa").rstrip("/")
 # ───────────────────────── أيقونات ─────────────────────────
 S = "stroke"
 ICONS = {
-    "target": (S, '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l7.5-7.5M19.5 4.5v4M19.5 4.5h-4"/>'),
+    "target": (S, '<circle cx="11" cy="13" r="8"/><circle cx="11" cy="13" r="3.8"/><path d="M11 13l9.5-9.5M20.5 3.5h-4.2M20.5 3.5v4.2"/>'),
     "chat": (S, '<path d="M4 5.5h16v11H10.5L6 20.5v-4H4z"/><path d="M8 9.5h8M8 12.5h5"/>'),
     "pen": (S, '<path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M13.5 6.5l4 4"/>'),
     "search": (S, '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>'),
@@ -181,7 +181,7 @@ def crumbs_html(trail, rel):
 
 def banner(rel, trail, eyebrow, h1, lead, icon, chips, scheme="teal", actions="", seed="x", uid="b", kind="svc"):
     art = art_svg(seed, icon, chips, scheme, uid)
-    return (f'<section class="banner b-{kind}"><div class="wrap banner-in"><div class="banner-copy">'
+    return (f'<section class="banner b-{kind}" data-spot><div class="spot" aria-hidden="true"></div><div class="wrap banner-in"><div class="banner-copy">'
             f'{crumbs_html(trail, rel)}<p class="eyebrow">{eyebrow}</p><h1>{h1}</h1><p class="lead">{lead}</p>'
             f'<div class="actions">{actions}</div></div><div class="banner-art" aria-hidden="true">{art}</div></div></section>')
 

@@ -88,7 +88,7 @@
   }
 
   function services() {
-    return bot('<p>نقدّم <strong>18 خدمة</strong> في مجموعتين:</p><p><strong>تسويقية</strong></p>' + svcList('marketing') + '<p><strong>تقنية</strong></p>' + svcList('tech'), ['اطلب عرض سعر', 'الأدوات المجانية', 'التواصل'], 450);
+    return bot('<p>خدماتنا في مجموعتين:</p><p><strong>تسويقية</strong></p>' + svcList('marketing') + '<p><strong>تقنية</strong></p>' + svcList('tech'), ['اطلب عرض سعر', 'الأدوات المجانية', 'التواصل'], 450);
   }
   function contact() {
     return bot('<p>يسعدنا تواصلك:</p><ul><li>اتصال: <a href="' + KB.tel + '"><strong class="lat">' + KB.phone + '</strong></a></li><li><a href="' + waUrl('مرحباً يدير، أرغب في الاستفسار.') + '" target="_blank" rel="noopener">واتساب</a></li><li>' + link('تواصل-معنا/', 'صفحة التواصل ونموذج الطلب') + '</li></ul>', ['حساباتكم', 'اطلب عرض سعر']);

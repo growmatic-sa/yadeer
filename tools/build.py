@@ -44,19 +44,19 @@ def og_job(key, h1, eyebrow, icon, chips, scheme):
 
 def service_card(pg, s, delay=0):
     tags = "".join(f'<span class="tag{" lat" if s_.isascii() else ""}">{esc(s_)}</span>' for s_ in s["tags"])
-    return (f'<a class="card svc rv" href="{pg.rel("/الخدمات/" + s["slug"] + "/")}" style="--d:{delay}s">'
+    return (f'<a class="card svc tilt glow rv" data-g="{s["group"]}" href="{pg.rel("/الخدمات/" + s["slug"] + "/")}" style="--d:{delay}s">'
             f'<div class="card-top"><span class="card-icon">{ico(s["icon"], 26)}</span><span class="go">{ico("arrow", 18)}</span></div>'
             f'<h3 class="h3">{esc(s["title"])}</h3><p>{esc(s["short"])}</p><div class="tags">{tags}</div></a>')
 
 
 def tool_card(pg, t, delay=0):
-    return (f'<a class="card tool-card rv" href="{pg.rel("/مختبر-النمو/" + t["slug"] + "/")}" style="--d:{delay}s">'
+    return (f'<a class="card tool-card tilt glow rv" href="{pg.rel("/مختبر-النمو/" + t["slug"] + "/")}" style="--d:{delay}s">'
             f'<div class="card-top"><span class="card-icon alt">{ico(t["icon"], 26)}</span><span class="go">{ico("arrow", 18)}</span></div>'
             f'<h3 class="h3">{esc(t["title"])}</h3><p>{esc(t["short"])}</p><span class="free">مجاني · بدون تسجيل</span></a>')
 
 
 def cta_band(pg, title, text, wa_text):
-    return (f'<section class="sec cta-sec"><div class="wrap"><div class="cta rv">'
+    return (f'<section class="sec cta-sec"><div class="wrap"><div class="cta rv" data-spot><span class="rip r1"></span><span class="rip r2"></span><span class="rip r3"></span>'
             f'<svg class="cta-art" viewBox="0 0 200 200" aria-hidden="true"><path d="{SYMBOL_PATH}" fill="none" stroke="#B8E5DF" stroke-opacity=".4" stroke-width="1.5"/></svg>'
             f'<div><p class="eyebrow">الخطوة التالية <span class="lat">Next step</span></p><h2 class="h2">{title}</h2><p class="lead">{text}</p>'
             f'<div class="actions">{btn(wa_link(wa_text), "تحدّث معنا على واتساب", "mint", "arrow", "target=_blank rel=noopener")}'
@@ -140,6 +140,30 @@ def tool_ui(kind):
 
 
 # ───────────────────────── الصفحة الرئيسية ─────────────────────────
+def orbit_diagram(pg):
+    import math
+    nodes = [
+        ("compass", "خطة واستشارة", "نبدأ من الهدف", "الاستشارات-وخطط-التسويق"),
+        ("shapes", "هوية ومحتوى", "علامة تُعرف", "الهوية-البصرية-والتصميم"),
+        ("target", "إعلان وتأثير", "وصول يُقاس", "ادارة-الحملات-الاعلانية"),
+        ("browser", "موقع ومتجر", "وجهة تحوّل الزائر", "تصميم-وبرمجة-المواقع-الالكترونية"),
+        ("mail", "عميل يعود", "واتساب وبريد", "التسويق-بالبريد-والواتساب"),
+        ("chart", "قياس وقرار", "أرقام تُقرأ", "تحليل-البيانات-والتتبع"),
+    ]
+    lines, items = [], []
+    for i, (ic, t, sub, slug) in enumerate(nodes):
+        a = math.radians(-90 + i * 60)
+        x, y = 50 + 37 * math.cos(a), 50 + 37 * math.sin(a)
+        lines.append(f'<line x1="50" y1="50" x2="{x:.1f}" y2="{y:.1f}" style="--i:{i}"/>')
+        items.append(f'<a class="onode" style="left:{x:.1f}%;top:{y:.1f}%;--i:{i}" href="{pg.rel("/الخدمات/" + slug + "/")}"><span class="oi">{ico(ic, 24)}</span><b>{t}</b><small>{sub}</small></a>')
+    return (f'<div class="orbit-wrap rv"><svg class="orbit-svg" viewBox="0 0 100 100" aria-hidden="true"><circle class="r1" cx="50" cy="50" r="37"/><circle class="r2" cx="50" cy="50" r="47"/>'
+            f'<g class="olines">{"".join(lines)}</g></svg><div class="ocore" aria-hidden="true"><span class="pulse p1"></span><span class="pulse p2"></span>'
+            f'<img src="{pg.asset("img/symbol.svg")}" alt="" width="88" height="84"></div>{"".join(items)}</div>')
+
+
+MARQUEE = ["إدارة الحملات", "سيو", "محتوى عربي", "هوية بصرية", "فيديو وموشن", "مؤثرون", "واتساب", "متاجر إلكترونية", "مواقع سريعة", "تطبيقات جوال", "أنظمة", "أتمتة", "تتبّع وقياس"]
+
+
 def build_home():
     pg = Page("/", f"{SITE['name']} | وكالة تسويق إلكتروني وحلول تقنية في السعودية",
               "وكالة تسويق إلكتروني وحلول تقنية في السعودية: حملات إعلانية، سيو، محتوى، مواقع، متاجر، تطبيقات وأنظمة، مع أدوات تفاعلية مجانية لحساب العائد قبل أن تصرف.",
@@ -154,9 +178,9 @@ def build_home():
         ("أحتاج نظاماً أو تطبيقاً لعملي", "مصمم-خطة-النمو", "الاستشارات-التقنية-والتحول-الرقمي", "chip"),
     ]
     path_cards = "".join(
-        f'<div class="path rv" style="--d:{i * .06}s"><span class="card-icon">{ico(ic, 24)}</span><h3 class="h4">{esc(t)}</h3>'
-        f'<div class="path-links"><a href="{rel("/مختبر-النمو/" + tl + "/")}">{ico("pulse", 16)} جرّب الأداة: {esc(TOOL_BY_SLUG[tl]["title"].split(" (")[0])}</a>'
-        f'<a href="{rel("/الخدمات/" + sv + "/")}">{ico("arrow", 16)} الخدمة: {esc(BY_SLUG[sv]["title"])}</a></div></div>'
+        f'<div class="path glow rv" style="--d:{i * .06}s"><span class="path-n lat">0{i + 1}</span><span class="card-icon">{ico(ic, 24)}</span><h3 class="h4">{esc(t)}</h3>'
+        f'<div class="path-links"><a href="{rel("/مختبر-النمو/" + tl + "/")}">{ico("pulse", 16)} جرّب: {esc(TOOL_BY_SLUG[tl]["title"].split(" (")[0])}</a>'
+        f'<a href="{rel("/الخدمات/" + sv + "/")}">{ico("arrow", 16)} {esc(BY_SLUG[sv]["title"])}</a></div></div>'
         for i, (t, tl, sv, ic) in enumerate(paths))
     principles = [
         ("target", "مؤشر نجاح قبل التنفيذ", "نكتب لكل خدمة المؤشر الذي سنحكم به عليها قبل أن نبدأ، فلا نختلف بعد ذلك على معنى «نجح»."),
@@ -164,38 +188,45 @@ def build_home():
         ("pulse", "شفافية في الأرقام", "تقارير تربط الإنفاق بالنتائج، وتتبّع يُركَّب أولاً، وحسابات إعلانية باسمك."),
         ("browser", "تسويق وتقنية تحت سقف واحد", "الحملة تحتاج موقعاً سريعاً وتتبّعاً سليماً. نبنيهما معاً فلا تضيع المسؤولية بين مورّدين."),
     ]
-    pr = "".join(f'<div class="princ rv" style="--d:{i * .07}s"><span class="card-icon">{ico(ic, 24)}</span><h3 class="h4">{t}</h3><p>{d}</p></div>' for i, (ic, t, d) in enumerate(principles))
-    mk = "".join(service_card(pg, s, (i % 3) * .07) for i, s in enumerate(SERVICES) if s["group"] == "marketing")
-    tk = "".join(service_card(pg, s, (i % 3) * .07) for i, s in enumerate(SERVICES) if s["group"] == "tech")
-    tools = "".join(tool_card(pg, t, (i % 3) * .07) for i, t in enumerate(TOOLS))
+    pr = "".join(f'<div class="princ glow rv" style="--d:{i * .07}s"><span class="card-icon">{ico(ic, 24)}</span><h3 class="h4">{t}</h3><p>{d}</p></div>' for i, (ic, t, d) in enumerate(principles))
+    svc_cards = "".join(service_card(pg, s, (i % 3) * .07).replace('class="card svc rv"', f'class="card svc tilt glow rv" data-g="{s["group"]}"') for i, s in enumerate(SERVICES))
+    tools = "".join(tool_card(pg, t, (i % 3) * .07).replace('class="card tool-card rv"', 'class="card tool-card tilt glow rv"') for i, t in enumerate(TOOLS))
     steps = [("استشارة مجانية", "نسمع منك عن مشروعك وهدفك وما جرّبته من قبل."), ("خطة وعرض سعر", "نرسل خطة مختصرة وعرضاً مكتوباً بكل البنود."),
              ("تنفيذ وإطلاق", "ننفّذ ما اتفقنا عليه ونطلعك على كل مرحلة."), ("قياس وتحسين", "تقرير دوري بالأرقام، وقرار بما نغيّره بعده.")]
-    st = "".join(f'<li class="step rv" style="--d:{i * .08}s"><span class="node">{i + 1}</span><h3 class="h4">{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(steps))
+    st = "".join(f'<li class="step rv" style="--d:{i * .12}s"><span class="node">{i + 1}</span><h3 class="h4">{t}</h3><p>{d}</p></li>' for i, (t, d) in enumerate(steps))
     posts = "".join(
-        f'<a class="card post rv" href="{rel("/المدونة/" + p["slug"] + "/")}" style="--d:{i * .07}s"><span class="pill">{esc(p["cat"])}</span><h3 class="h3">{esc(p["title"])}</h3><p>{esc(p["desc"])}</p><span class="meta">{p["read"]} دقائق قراءة</span></a>'
+        f'<a class="card post tilt glow rv" href="{rel("/المدونة/" + p["slug"] + "/")}" style="--d:{i * .07}s"><span class="pill">{esc(p["cat"])}</span><h3 class="h3">{esc(p["title"])}</h3><p>{esc(p["desc"])}</p><span class="meta">{p["read"]} دقائق قراءة</span></a>'
         for i, p in enumerate(POSTS[:3]))
-    hero = f'''<section class="hero">{network_bg("yadeer-hero")}<div class="wrap hero-in">
+    mq = "".join(f'<span>{t}</span><i aria-hidden="true"></i>' for t in MARQUEE)
+    chips = "".join(f'<li>{ico("check", 16)} {t}</li>' for t in ("تسويق وتقنية تحت سقف واحد", "خطة مكتوبة قبل التنفيذ", "نتائج تُقاس بالأرقام"))
+    hero = f'''<section class="hero" data-spot>{network_bg("yadeer-hero")}<div class="spot" aria-hidden="true"></div><div class="wrap hero-in">
 <div class="hero-copy"><p class="eyebrow">وكالة تسويق إلكتروني وحلول تقنية <span class="lat">Grow further.</span></p>
-<h1>نُدير حضورك الرقمي <span class="hl">ليصل أبعد</span></h1>
+<h1><span class="h1-l">نُدير <span class="rot" data-words="حضورك الرقمي|تسويقك|متجرك|إعلانك|مشروعك"><span class="rot-w">حضورك الرقمي</span></span></span><span class="h1-l hl">ليصل أبعد</span></h1>
 <p class="lead">نبدأ من رقم هدفك لا من قالب جاهز: خطة مكتوبة، تتبّع يُركَّب أولاً، وأدوات حساب مفتوحة تجرّبها بنفسك قبل أن تلتزم بأي شيء.</p>
-<div class="actions">{btn(rel("/مختبر-النمو/مصمم-خطة-النمو/"), "ابنِ خطة نموّك في دقيقة", "mint", "arrow")}{btn(wa_link("مرحباً يدير، أرغب في الاستفسار عن خدماتكم."), "تحدّث معنا على واتساب", "ghost-light", "whatsapp", "target=_blank rel=noopener")}</div>
-<ul class="facts"><li><strong class="lat">18</strong> خدمة، لكل واحدة صفحتها</li><li><strong class="lat">6</strong> أدوات حساب مجانية</li><li><strong>مؤشر نجاح</strong> مكتوب قبل البدء</li></ul></div>
-<div class="hero-side"><div class="mini card" data-tool="mini"><div class="mini-h"><span class="dot"></span><strong>جرّبها الآن</strong><small>كم يعود عليك إعلانك؟</small></div>
+<div class="actions">{btn(rel("/مختبر-النمو/مصمم-خطة-النمو/"), "ابنِ خطة نموّك في دقيقة", "mint magnetic", "arrow")}{btn(wa_link("مرحباً يدير، أرغب في الاستفسار عن خدماتكم."), "تحدّث معنا على واتساب", "ghost-light", "whatsapp", "target=_blank rel=noopener")}</div>
+<ul class="vchips">{chips}</ul></div>
+<div class="hero-side"><div class="float-badge" aria-hidden="true"><span class="lat" id="m-roas-badge">4.0×</span><small>العائد</small></div>
+<div class="mini card" data-tool="mini"><div class="mini-h"><span class="dot"></span><strong>جرّبها الآن</strong><small>كم يعود عليك إعلانك؟</small></div>
 {sld("m-spend", "ميزانية الإعلان الشهرية", 8000, "ر.س", 500, 100000, 500)}
 {sld("m-roas", "العائد المتوقع (ROAS)", 4, "ضعف", 1, 10, 0.5)}
 {sld("m-margin", "هامش ربحك", 30, "%", 5, 90, 1)}
 <div class="mini-out"><div><span>المبيعات المتوقعة</span><strong class="lat" id="m-rev">—</strong></div><div><span>صافي الربح</span><strong class="lat" id="m-profit">—</strong></div></div>
 <p class="mini-note" id="m-note" role="status"></p>
 <a class="mini-link" href="{rel("/مختبر-النمو/حاسبة-العائد-على-الانفاق-الاعلاني/")}">الحاسبة الكاملة {ico("arrow", 16)}</a></div>
-</div></div></section>'''
+<div class="float-chart" aria-hidden="true"><div class="bars3"><div><i id="mb-spend"></i><span>الإنفاق</span></div><div><i id="mb-rev"></i><span>المبيعات</span></div><div><i id="mb-profit"></i><span>الربح</span></div></div></div></div></div></section>
+<div class="marquee" aria-hidden="true"><div class="mq-track">{mq}{mq}</div></div>'''
     body = hero
-    body += sec(head("لمن يبدأ من مشكلته <span class=lat>Start here</span>", "ابدأ من مشكلتك، لا من قائمة الخدمات", "اختر ما يشبه وضعك، وسنأخذك إلى الأداة والخدمة المناسبتين.") + f'<div class="paths">{path_cards}</div>', "soft")
-    body += sec(head("لماذا يدير <span class=lat>Approach</span>", "فكرة مختلفة: نُدير بالأرقام، ونفتحها لك", "") + f'<div class="princs">{pr}</div>')
-    body += sec(head("خدماتنا <span class=lat>Services</span>", "خدمات تسويقية", GROUPS["marketing"]["lead"]) + f'<div class="cards">{mk}</div>', "alt", "marketing")
-    body += sec(head("خدماتنا <span class=lat>Technology</span>", "خدمات تقنية", GROUPS["tech"]["lead"]) + f'<div class="cards">{tk}</div>', "", "tech")
-    body += sec(head("مختبر النمو <span class=lat>Growth Lab</span>", "جرّب قبل أن تتواصل", "ست أدوات تفاعلية مجانية تحسب لك العائد والتكلفة والقيمة وتبني لك خطة مبدئية.") + f'<div class="cards">{tools}</div>'
-                + f'<p class="center"><a class="btn btn-secondary" href="{rel("/مختبر-النمو/")}"><span>كل أدوات المختبر</span>{ico("arrow", 18, "arw")}</a></p>', "dark lab-sec")
-    body += sec(head("طريقة العمل <span class=lat>Process</span>", "الطريقة نفسها في كل خدمة", "مهما كانت الخدمة، نمرّ بالخطوات الأربع نفسها.") + f'<ol class="steps">{st}</ol>', "soft")
+    body += sec(head("لمن يبدأ من مشكلته <span class=lat>Start here</span>", "ابدأ من مشكلتك، لا من قائمة الخدمات", "اختر ما يشبه وضعك، وسنأخذك إلى الأداة والخدمة المناسبتين.") + f'<div class="paths">{path_cards}</div>', "soft deco-y")
+    body += sec(f'<div class="orbit-sec"><div class="orbit-copy">{head("لماذا يدير <span class=lat>Approach</span>", "حلقات تغذّي بعضها حول رقم واحد", "")}'
+                '<p class="lead">الحملة بلا موقع سريع تُهدر، والموقع بلا تتبّع يُخمَّن، والمحتوى بلا خطة يضيع. نبني الحلقات معاً حتى تعمل كشبكة واحدة، كما يعمل رمز يدير: إطار منظّم، شبكة اتصال، ووصول أبعد.</p>'
+                f'<div class="actions">{btn(rel("/من-نحن/"), "اعرف فكرة العلامة", "secondary", "arrow")}</div></div>{orbit_diagram(pg)}</div>')
+    body += sec(f'<div class="princs">{pr}</div>', "alt")
+    body += sec(head("خدماتنا <span class=lat>Services</span>", "كل ما يحتاجه حضورك الرقمي", "تسويق يوصلك إلى عميلك، وتقنية تبني ما يصل إليه.")
+                + f'<div class="tabs" role="tablist" aria-label="تصفية الخدمات"><button type="button" class="tab on" data-f="all" role="tab" aria-selected="true">الكل</button><button type="button" class="tab" data-f="marketing" role="tab" aria-selected="false">خدمات تسويقية</button><button type="button" class="tab" data-f="tech" role="tab" aria-selected="false">خدمات تقنية</button></div>'
+                + f'<div class="cards svc-grid" data-tabs>{svc_cards}</div>', "", "services")
+    body += sec(head("مختبر النمو <span class=lat>Growth Lab</span>", "جرّب قبل أن تتواصل", "أدوات تفاعلية مجانية تحسب لك العائد والتكلفة والقيمة وتبني لك خطة مبدئية.") + f'<div class="cards">{tools}</div>'
+                + f'<p class="center"><a class="btn btn-mint" href="{rel("/مختبر-النمو/")}"><span>كل أدوات المختبر</span>{ico("arrow", 18, "arw")}</a></p>', "dark lab-sec", "lab")
+    body += sec(head("طريقة العمل <span class=lat>Process</span>", "الطريقة نفسها في كل خدمة", "مهما كانت الخدمة، نمرّ بالخطوات الأربع نفسها.") + f'<ol class="steps" data-draw>{st}</ol>', "soft")
     body += sec(head("المدونة <span class=lat>Insights</span>", "محتوى يساعدك على القرار", "مقالات عملية تجيب عن أسئلة الميزانية والقياس والسيو.") + f'<div class="cards">{posts}</div>')
     body += sec(head("أسئلة شائعة <span class=lat>FAQ</span>", "قبل أن تسأل") + faq_html(HOME_FAQ), "alt")
     body += cta_band(pg, "لنُدِر مشروعك نحو الأعلى.", "راسلنا على واتساب أو اتصل بنا، ونرسل لك خطة مختصرة وعرض سعر واضحاً.", "مرحباً يدير، أرغب في خطة وعرض سعر.")
@@ -210,11 +241,11 @@ def build_home():
 # ───────────────────────── الخدمات ─────────────────────────
 def build_services_hub():
     pg = Page("/الخدمات/", f"خدمات التسويق الإلكتروني والحلول التقنية | يدير",
-              "18 خدمة تسويقية وتقنية من يدير: إدارة حملات، سيو، محتوى، هوية، فيديو، مؤثرون، مواقع، متاجر، تطبيقات، أنظمة وأتمتة، ولكل خدمة صفحة مفصّلة.",
+              "خدمات تسويقية وتقنية من يدير: إدارة حملات، سيو، محتوى، هوية، فيديو، مؤثرون، مواقع، متاجر، تطبيقات، أنظمة وأتمتة، ولكل خدمة صفحة مفصّلة.",
               "", og="services", priority="0.9")
     rel = pg.rel
     trail = [("الرئيسية", "/"), ("الخدمات", None)]
-    b = banner(rel, trail, 'خدماتنا <span class="lat">Services</span>', "تسويق وتقنية، وإدارة واحدة", "18 خدمة في مجموعتين. اختر واحدة أو اجمع بينها، ونبدأ دائماً من هدفك.",
+    b = banner(rel, trail, 'خدماتنا <span class="lat">Services</span>', "تسويق وتقنية، وإدارة واحدة", "خدمات تسويقية وتقنية متكاملة. اختر واحدة أو اجمع بينها، ونبدأ دائماً من هدفك.",
                "dashboard", ["تسويق", "تقنية", "قياس"], "teal", seed="services", uid="sv",
                actions=btn(wa_link("مرحباً يدير، أرغب في معرفة الخدمة الأنسب لي."), "اسألنا عن الأنسب لك", "mint", "arrow", "target=_blank rel=noopener"))
     body = b
@@ -276,7 +307,7 @@ def build_lab_hub():
               "", og="lab", priority="0.9")
     rel = pg.rel
     trail = [("الرئيسية", "/"), ("مختبر النمو", None)]
-    b = banner(rel, trail, 'مختبر النمو <span class="lat">Growth Lab</span>', "جرّب أرقامك قبل أن تصرف", "ست أدوات تفاعلية مجانية تحسب لك العائد والتكلفة والقيمة، وتبني خطة مبدئية، وتشخّص حضورك الرقمي.",
+    b = banner(rel, trail, 'مختبر النمو <span class="lat">Growth Lab</span>', "جرّب أرقامك قبل أن تصرف", "أدوات تفاعلية مجانية تحسب لك العائد والتكلفة والقيمة، وتبني خطة مبدئية، وتشخّص حضورك الرقمي.",
                "calc", ["ROAS", "CPA", "LTV"], "mint", seed="lab", uid="lb",
                actions=btn(rel("/مختبر-النمو/مصمم-خطة-النمو/"), "ابدأ بمصمم الخطة", "mint", "arrow"))
     tools = "".join(tool_card(pg, t, (i % 3) * .07) for i, t in enumerate(TOOLS))

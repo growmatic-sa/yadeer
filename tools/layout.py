@@ -113,7 +113,7 @@ def render(pg, root_hint=True):
     robots = "noindex, follow" if pg.noindex else "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     graph = [org_schema(), website_schema()] + pg.schema
     ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, separators=(",", ":"))
-    head_scripts = "".join(f'<script src="{pg.asset("js/" + s)}" defer></script>' for s in ("main.js", "chat.js", *pg.scripts))
+    head_scripts = "".join(f'<script src="{pg.asset("js/" + s)}" defer></script>' for s in ("main.js", "fx.js", "chat.js", *pg.scripts))
     return f'''<!doctype html>
 <html lang="ar" dir="rtl">
 <head>

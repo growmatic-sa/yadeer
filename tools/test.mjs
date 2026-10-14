@@ -67,7 +67,7 @@ await p.fill('#gl-q', 'xyzxyz'); ok(await p.$eval('#gl-empty', e => !e.hidden), 
 await p.goto(B + '/'); await p.click('[data-chat-open]'); await p.waitForTimeout(900);
 ok(await p.$eval('#yd-chat', e => !e.hidden), 'chat opens'); ok((await p.$$('.chat-chips button')).length === 4, 'chat chips');
 async function say(q) { await p.fill('#chat-in', q); await p.press('#chat-in', 'Enter'); await p.waitForTimeout(900); return p.$$eval('.msg.bot', m => m[m.length - 1].textContent); }
-let a = await say('وش خدماتكم'); ok(a.includes('18 خدمة'), 'chat services');
+let a = await say('وش خدماتكم'); ok(a.includes('مجموعتين'), 'chat services');
 a = await say('كم الاسعار'); ok(a.includes('عرضاً مكتوباً'), 'chat price');
 a = await say('ابغى اعلانات سناب'); ok(a.includes('إدارة الحملات الإعلانية'), 'chat ads match → ' + a.slice(0, 60));
 a = await say('ابي موقع'); ok(a.includes('المواقع') , 'chat website match → ' + a.slice(0, 80));

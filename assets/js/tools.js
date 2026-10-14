@@ -19,7 +19,7 @@
     edu: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c3 2.5 9 2.5 12 0v-4.5"/>',
     b2b: '<rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
     shop: '<path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9a3 3 0 006 0 3 3 0 006 0 3 3 0 004 0"/>',
-    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l7.5-7.5"/>',
+    target: '<circle cx="11" cy="13" r="8"/><circle cx="11" cy="13" r="3.8"/><path d="M11 13l9.5-9.5M20.5 3.5h-4.2M20.5 3.5v4.2"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/>',
     eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
     cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
@@ -76,6 +76,10 @@
       $$('[data-o]', root).forEach(function (o) { var e = document.getElementById(o.getAttribute('data-o')); o.textContent = nf(parseFloat(e.value), parseFloat(e.value) % 1 ? 1 : 0) + ' ' + o.getAttribute('data-u'); });
       var s = val('m-spend'), r = val('m-roas'), m = val('m-margin') / 100;
       var rev = s * r, profit = rev * m - s, be = m > 0 ? 1 / m : Infinity;
+      var mx = Math.max(s, rev, Math.abs(profit), 1);
+      var setH = function (id, v, neg) { var e = document.getElementById(id); if (e) { e.style.height = Math.max(6, Math.abs(v) / mx * 100) + '%'; e.className = neg ? 'neg' : ''; } };
+      setH('mb-spend', s); setH('mb-rev', rev); setH('mb-profit', profit, profit < 0);
+      set('m-roas-badge', nf(r, 1) + '×');
       set('m-rev', nf(rev) + ' ر.س'); set('m-profit', (profit < 0 ? '−' : '') + nf(Math.abs(profit)) + ' ر.س');
       var p = document.getElementById('m-profit'); if (p) p.style.color = profit < 0 ? '#8A1C14' : '#00634F';
       set('m-note', profit >= 0 ? 'عائدك ' + nf(r, 1) + ' أعلى من عائد التعادل ' + nf(be, 1) + ': الحملة رابحة بهذه الافتراضات.'
